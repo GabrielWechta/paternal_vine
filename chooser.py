@@ -1,4 +1,3 @@
-
 from functions import *
 
 
@@ -11,7 +10,7 @@ def find_pattern(map, Solution_For_Diag):
                    ["SAME", "SAME", "SAME", "EMPTY", "SAME", "SAME"],
                    ["SAME", "SAME", "EMPTY", "SAME", "SAME", "SAME"],
                    ["SAME", "EMPTY", "SAME", "SAME", "SAME", "SAME"],
-                   ["EMPTY", "SAME",  "SAME", "SAME", "SAME", "SAME"],
+                   ["EMPTY", "SAME", "SAME", "SAME", "SAME", "SAME"],
 
                    ["SAME", "SAME", "SAME", "SAME", "EMPTY"],  # 5 in a row 4 SAME
                    ["SAME", "SAME", "SAME", "EMPTY", "SAME"],
@@ -48,24 +47,23 @@ def find_pattern(map, Solution_For_Diag):
                    ]
 
     pattern_kork_tab = [["SAME", "SAME", "SAME", "SAME", "EMPTY", "SAME", "SAME"],  # 6 in a raw, 5 SAME
-                   ["SAME", "SAME", "SAME", "EMPTY", "SAME", "SAME", "SAME"],
-                   ["SAME", "SAME", "EMPTY", "SAME", "SAME", "SAME", "SAME"],
+                        ["SAME", "SAME", "SAME", "EMPTY", "SAME", "SAME", "SAME"],
+                        ["SAME", "SAME", "EMPTY", "SAME", "SAME", "SAME", "SAME"],
 
-                   ["SAME", "SAME", "SAME", "SAME", "DIFF", "SAME"],  # 6 in a raw 5 SAME
-                   ["SAME", "SAME", "SAME", "DIFF", "SAME", "SAME"],
-                   ["SAME", "SAME", "DIFF", "SAME", "SAME", "SAME"],
-                   ["SAME", "DIFF", "SAME", "SAME", "SAME", "SAME"],
-                   ["DIFF", "SAME", "SAME", "SAME", "SAME", "SAME"],
+                        ["SAME", "SAME", "SAME", "SAME", "DIFF", "SAME"],  # 6 in a raw 5 SAME
+                        ["SAME", "SAME", "SAME", "DIFF", "SAME", "SAME"],
+                        ["SAME", "SAME", "DIFF", "SAME", "SAME", "SAME"],
+                        ["SAME", "DIFF", "SAME", "SAME", "SAME", "SAME"],
+                        ["DIFF", "SAME", "SAME", "SAME", "SAME", "SAME"],
 
-                   ["SAME", "SAME", "SAME", "SAME", "DIFF"],  # 5 in a row 4 SAME
-                   ["SAME", "SAME", "SAME", "DIFF", "SAME"],
-                   ["SAME", "SAME", "DIFF", "SAME", "SAME"],
-                   ["SAME", "DIFF", "SAME", "SAME", "SAME"],
-                   ["DIFF", "SAME", "SAME", "SAME", "SAME"],
+                        ["SAME", "SAME", "SAME", "SAME", "DIFF"],  # 5 in a row 4 SAME
+                        ["SAME", "SAME", "SAME", "DIFF", "SAME"],
+                        ["SAME", "SAME", "DIFF", "SAME", "SAME"],
+                        ["SAME", "DIFF", "SAME", "SAME", "SAME"],
+                        ["DIFF", "SAME", "SAME", "SAME", "SAME"],
 
-                   ["SAME", "SAME", "SAME", "DIFF"],  # 3 SAME
-                   ["SAME", "SAME", "DIFF", "SAME"]]
-
+                        ["SAME", "SAME", "SAME", "DIFF"],  # 3 SAME
+                        ["SAME", "SAME", "DIFF", "SAME"]]
 
     # pattern_tab = [["SAME", "SAME", "SAME", "SAME", "EMPTY"], ["SAME", "SAME", "EMPTY"], ["SAME", "EMPTY", "SAME"]]
 
@@ -76,8 +74,6 @@ def find_pattern(map, Solution_For_Diag):
 
     diag_down_map = []
     diag_up_map = []
-
-
 
     for pattern in pattern_tab:
         """The original pattern_tab is replaced by new one. No need to worry, every time when find_pattern is called it 
@@ -111,7 +107,7 @@ def find_pattern(map, Solution_For_Diag):
 
                     balls_to_consider = find_not_considered_ball(local_map, color)
 
-                     # JW wsp x and y m
+                    # JW wsp x and y m
 
                     new_x = diag_down_map_orig_coordinates[y][index + add_to_x][0]
                     new_y = diag_down_map_orig_coordinates[y][index + add_to_x][1]
@@ -126,7 +122,7 @@ def find_pattern(map, Solution_For_Diag):
                     ball_found = try_to_move_ball(map, balls_to_consider, new_x, new_y)
                     if ball_found:
                         print("znalazłem kulkę")
-                        #Solution_For_Diag = 1
+                        # Solution_For_Diag = 1
                         if len(pattern) >= 6:
                             print('\033[96m' + str(pattern))
                         return ball_found[0], ball_found[1], new_x, new_y
@@ -205,7 +201,7 @@ def find_pattern(map, Solution_For_Diag):
                     ball_found = try_to_move_ball(map, balls_to_consider, new_x, new_y)
                     if ball_found:
                         print("znalazłem kulkę")
-                        #Solution_For_Diag = 0
+                        # Solution_For_Diag = 0
                         if len(pattern) >= 6:
                             print('\033[96m' + str(pattern))
                         return ball_found[0], ball_found[1], new_x, new_y
@@ -247,7 +243,7 @@ def find_pattern(map, Solution_For_Diag):
                     ball_found = try_to_move_ball(map, balls_to_consider, new_x, new_y)
                     if ball_found:
                         print("znalazłem kulkę")
-                        #Solution_For_Diag = 0
+                        # Solution_For_Diag = 0
                         if len(pattern) >= 6:
                             print('\033[96m' + str(pattern))
                         return ball_found[0], ball_found[1], new_x, new_y
@@ -325,7 +321,7 @@ def find_pattern(map, Solution_For_Diag):
                     ball_found = try_to_move_ball(map, balls_to_consider, new_x, new_y)
                     if ball_found:
                         print("znalazłem kulkę")
-                        #Solution_For_Diag = Fasle
+                        # Solution_For_Diag = Fasle
                         if len(pattern) >= 6:
                             print('\033[96m' + str(pattern))
                         return ball_found[0], ball_found[1], new_x, new_y
@@ -423,5 +419,3 @@ def find_pattern(map, Solution_For_Diag):
             #             print("nie znalazłem kulki")
             #
             # print("nie znalazłem pattern w diag_up")
-
-
