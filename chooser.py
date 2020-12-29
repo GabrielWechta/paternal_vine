@@ -1,6 +1,5 @@
 from functions import *
 
-
 class SolutionsHolder:
     def __init__(self):
         self.red = [None]
@@ -370,5 +369,4 @@ def find_pattern(map):
                         print("Ball not found.")
 
             print("nie znalazłem pattern w -270'")
-
     solutions_holder.show_best_solutions()
