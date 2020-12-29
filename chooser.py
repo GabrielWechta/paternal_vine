@@ -1,12 +1,68 @@
 from functions import *
 
+class SolutionsHolder:
+    def __init__(self):
+        self.red = [None]
+        self.green = [None]
+        self.blue = [None]
+        self.yellow = [None]
+
+    def save_solution(self, color: str, is_ending: bool, pattern_length: int, ball_x: int, ball_y: int, hole_x: int,
+                      hole_y: int):
+        if color == "R" and len(self.red) == 0:
+            self.red = [is_ending, pattern_length, ball_x, ball_y, hole_x, hole_y]
+        if color == "G" and len(self.green) == 0:
+            self.green = [is_ending, pattern_length, ball_x, ball_y, hole_x, hole_y]
+        if color == "B" and len(self.blue) == 0:
+            self.blue = [is_ending, pattern_length, ball_x, ball_y, hole_x, hole_y]
+        if color == "Y" and len(self.yellow) == 0:
+            self.yellow = [is_ending, pattern_length, ball_x, ball_y, hole_x, hole_y]
+
+    def show_best_solutions(self):
+        for solution in self.__dict__:
+            print(solution)
+
+    def decide(self, map, signal_map):
+        sorted_solutions = sorted(self.__dict__, key=lambda l: l[1], reverse=True)
+        ending_solutions = [solution if solution[0] is True and not None else None for solution in sorted_solutions]
+        for ending in ending_solutions:
+            if ending is not None:
+                return ending[2], ending[3], ending[4], ending[5]
+
+        """ Signal map part """
+        balls_by_signal = []
+        for y, _ in enumerate(signal_map):
+            for x, _ in enumerate(signal_map):
+                balls_by_signal.append([signal_map[y][x], x, y])
+        sorted_balls_by_signal = sorted(balls_by_signal, key=lambda l: l[0], reverse=True)
+
+        for ball in sorted_balls_by_signal:
+            ball_x, ball_y, ball_color = ball[1], ball[2], map[ball[2]][ball[1]]
+            if ball_color == "R":
+                hole_x, hole_y = self.red[4], self.red[5]
+                if bfs(map, ball_x, ball_y, hole_x, hole_y):
+                    return ball_x, ball_y, hole_x, hole_y
+            if ball_color == "G":
+                hole_x, hole_y = self.green[4], self.green[5]
+                if bfs(map, ball_x, ball_y, hole_x, hole_y):
+                    return ball_x, ball_y, hole_x, hole_y
+            if ball_color == "B":
+                hole_x, hole_y = self.blue[4], self.blue[5]
+                if bfs(map, ball_x, ball_y, hole_x, hole_y):
+                    return ball_x, ball_y, hole_x, hole_y
+            if ball_color == "Y":
+                hole_x, hole_y = self.yellow[4], self.yellow[5]
+                if bfs(map, ball_x, ball_y, hole_x, hole_y):
+                    return ball_x, ball_y, hole_x, hole_y
+        print("SOMETHING WENT WRONG in solutionHolder.decide")
+
 
 def find_pattern(map):
-    pattern_tab = [["SAME", "SAME", "SAME", "SAME", "EMPTY", "SAME", "SAME"],  # 6 in a raw, 5 SAME
+    pattern_tab = [["SAME", "SAME", "SAME", "SAME", "EMPTY", "SAME", "SAME"],  # 6 in a row, 5 SAME
                    ["SAME", "SAME", "SAME", "EMPTY", "SAME", "SAME", "SAME"],
                    ["SAME", "SAME", "EMPTY", "SAME", "SAME", "SAME", "SAME"],
 
-                   ["SAME", "SAME", "SAME", "SAME", "EMPTY", "SAME"],  # 6 in a raw 5 SAME
+                   ["SAME", "SAME", "SAME", "SAME", "EMPTY", "SAME"],  # 6 in a row 5 SAME
                    ["SAME", "SAME", "SAME", "EMPTY", "SAME", "SAME"],
                    ["SAME", "SAME", "EMPTY", "SAME", "SAME", "SAME"],
                    ["SAME", "EMPTY", "SAME", "SAME", "SAME", "SAME"],
@@ -18,7 +74,7 @@ def find_pattern(map):
                    ["SAME", "EMPTY", "SAME", "SAME", "SAME"],
                    ["EMPTY", "SAME", "SAME", "SAME", "SAME"],
 
-                   ["SAME", "SAME", "SAME", "EMPTY", "EMPTY"],  # 5 in a raw 3 SAME
+                   ["SAME", "SAME", "SAME", "EMPTY", "EMPTY"],  # 5 in a row 3 SAME
                    ["SAME", "SAME", "EMPTY", "SAME", "EMPTY"],
                    ["SAME", "EMPTY", "SAME", "SAME", "EMPTY"],
                    ["SAME", "EMPTY", "SAME", "EMPTY", "SAME"],
@@ -46,34 +102,12 @@ def find_pattern(map):
                    ["EMPTY"]
                    ]
 
-    pattern_kork_tab = [["SAME", "SAME", "SAME", "SAME", "EMPTY", "SAME", "SAME"],  # 6 in a raw, 5 SAME
-                        ["SAME", "SAME", "SAME", "EMPTY", "SAME", "SAME", "SAME"],
-                        ["SAME", "SAME", "EMPTY", "SAME", "SAME", "SAME", "SAME"],
-
-                        ["SAME", "SAME", "SAME", "SAME", "DIFF", "SAME"],  # 6 in a raw 5 SAME
-                        ["SAME", "SAME", "SAME", "DIFF", "SAME", "SAME"],
-                        ["SAME", "SAME", "DIFF", "SAME", "SAME", "SAME"],
-                        ["SAME", "DIFF", "SAME", "SAME", "SAME", "SAME"],
-                        ["DIFF", "SAME", "SAME", "SAME", "SAME", "SAME"],
-
-                        ["SAME", "SAME", "SAME", "SAME", "DIFF"],  # 5 in a row 4 SAME
-                        ["SAME", "SAME", "SAME", "DIFF", "SAME"],
-                        ["SAME", "SAME", "DIFF", "SAME", "SAME"],
-                        ["SAME", "DIFF", "SAME", "SAME", "SAME"],
-                        ["DIFF", "SAME", "SAME", "SAME", "SAME"],
-
-                        ["SAME", "SAME", "SAME", "DIFF"],  # 3 SAME
-                        ["SAME", "SAME", "DIFF", "SAME"]]
-
-    # pattern_tab = [["SAME", "SAME", "SAME", "SAME", "EMPTY"], ["SAME", "SAME", "EMPTY"], ["SAME", "EMPTY", "SAME"]]
-
     # create the signal map every time when new map is received from the mobile screen
 
     signal_map = create_the_signal_map(map)
     different_finder_and_signal_update(map, signal_map)
 
-    diag_down_map = []
-    diag_up_map = []
+    solutions_holder = SolutionsHolder()
 
     for pattern in pattern_tab:
         """The original pattern_tab is replaced by new one. No need to worry, every time when find_pattern is called it 
@@ -121,13 +155,14 @@ def find_pattern(map):
 
                     ball_found = try_to_move_ball(map, balls_to_consider, new_x, new_y)
                     if ball_found:
-                        print("znalazłem kulkę")
-                        # Solution_For_Diag = 1
-                        if len(pattern) >= 6:
-                            print('\033[96m' + str(pattern))
-                        return ball_found[0], ball_found[1], new_x, new_y, True
+                        print("Ball found.")
+                        print("Adding to solutions: ", pattern)
+                        solutions_holder.save_solution(color, True if pattern.count("SAME") >= 4 else False,
+                                                       len(pattern),
+                                                       ball_found[0], ball_found[1], new_x,
+                                                       new_y)
                     else:
-                        print("nie znalazłem kulki")
+                        print("Ball not found.")
 
             print("nie znalazłem pattern w diag_down")
 
@@ -166,13 +201,14 @@ def find_pattern(map):
 
                     ball_found = try_to_move_ball(map, balls_to_consider, new_x, new_y)
                     if ball_found:
-                        print("znalazłem kulkę")
-                        Solution_For_Diag = 1
-                        if len(pattern) >= 6:
-                            print('\033[96m' + str(pattern))
-                        return ball_found[0], ball_found[1], new_x, new_y, True
+                        print("Ball found.")
+                        print("Adding to solutions: ", pattern)
+                        solutions_holder.save_solution(color, True if pattern.count("SAME") >= 4 else False,
+                                                       len(pattern),
+                                                       ball_found[0], ball_found[1], new_x,
+                                                       new_y)
                     else:
-                        print("nie znalazłem kulki")
+                        print("Ball not found.")
 
             print("nie znalazłem pattern w diag_up")
 
@@ -200,13 +236,14 @@ def find_pattern(map):
 
                     ball_found = try_to_move_ball(map, balls_to_consider, new_x, new_y)
                     if ball_found:
-                        print("znalazłem kulkę")
-                        # Solution_For_Diag = False
-                        if len(pattern) >= 6:
-                            print('\033[96m' + str(pattern))
-                        return ball_found[0], ball_found[1], new_x, new_y, False
+                        print("Ball found.")
+                        print("Adding to solutions: ", pattern)
+                        solutions_holder.save_solution(color, True if pattern.count("SAME") >= 4 else False,
+                                                       len(pattern),
+                                                       ball_found[0], ball_found[1], new_x,
+                                                       new_y)
                     else:
-                        print("nie znalazłem kulki")
+                        print("Ball not found.")
 
             print("nie znalazłem w normalnej")
 
@@ -242,13 +279,14 @@ def find_pattern(map):
 
                     ball_found = try_to_move_ball(map, balls_to_consider, new_x, new_y)
                     if ball_found:
-                        print("znalazłem kulkę")
-                        # Solution_For_Diag = False
-                        if len(pattern) >= 6:
-                            print('\033[96m' + str(pattern))
-                        return ball_found[0], ball_found[1], new_x, new_y, False
+                        print("Ball found.")
+                        print("Adding to solutions: ", pattern)
+                        solutions_holder.save_solution(color, True if pattern.count("SAME") >= 4 else False,
+                                                       len(pattern),
+                                                       ball_found[0], ball_found[1], new_x,
+                                                       new_y)
                     else:
-                        print("nie znalazłem kulki")
+                        print("Ball not found.")
 
             print("nie znalazłem pattern w -90'")
 
@@ -281,13 +319,14 @@ def find_pattern(map):
 
                     ball_found = try_to_move_ball(map, balls_to_consider, new_x, new_y)
                     if ball_found:
-                        print("znalazłem kulkę")
-                        Solution_For_Diag = False
-                        if len(pattern) >= 6:
-                            print('\033[96m' + str(pattern))
-                        return ball_found[0], ball_found[1], new_x, new_y, False
+                        print("Ball found.")
+                        print("Adding to solutions: ", pattern)
+                        solutions_holder.save_solution(color, True if pattern.count("SAME") >= 4 else False,
+                                                       len(pattern),
+                                                       ball_found[0], ball_found[1], new_x,
+                                                       new_y)
                     else:
-                        print("nie znalazłem kulki")
+                        print("Ball not found.")
 
             print("nie znalazłem pattern w -180'")
 
@@ -320,12 +359,14 @@ def find_pattern(map):
 
                     ball_found = try_to_move_ball(map, balls_to_consider, new_x, new_y)
                     if ball_found:
-                        print("znalazłem kulkę")
-                        # Solution_For_Diag = Fasle
-                        if len(pattern) >= 6:
-                            print('\033[96m' + str(pattern))
-                        return ball_found[0], ball_found[1], new_x, new_y, False
+                        print("Ball found.")
+                        print("Adding to solutions: ", pattern)
+                        solutions_holder.save_solution(color, True if pattern.count("SAME") >= 4 else False,
+                                                       len(pattern),
+                                                       ball_found[0], ball_found[1], new_x,
+                                                       new_y)
                     else:
-                        print("nie znalazłem kulki")
+                        print("Ball not found.")
 
             print("nie znalazłem pattern w -270'")
+    solutions_holder.show_best_solutions()

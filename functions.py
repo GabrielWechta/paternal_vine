@@ -241,6 +241,13 @@ def try_to_move_ball(maze, balls_to_consider, x_target, y_target):
     return None
 
 
+def will_ball_reach_it(maze, x_src, y_src, x_tar, y_tar):
+    if bfs(maze, x_src, y_src, x_tar, y_tar):
+        return True
+    else:
+        return False
+
+
 def rotate_matrix(mat):
     N = len(mat[0])
     # Consider all squares one by one
