@@ -1,7 +1,7 @@
 from functions import *
 
 
-def find_pattern(map, Solution_For_Diag):
+def find_pattern(map):
     pattern_tab = [["SAME", "SAME", "SAME", "SAME", "EMPTY", "SAME", "SAME"],  # 6 in a raw, 5 SAME
                    ["SAME", "SAME", "SAME", "EMPTY", "SAME", "SAME", "SAME"],
                    ["SAME", "SAME", "EMPTY", "SAME", "SAME", "SAME", "SAME"],
@@ -125,7 +125,7 @@ def find_pattern(map, Solution_For_Diag):
                         # Solution_For_Diag = 1
                         if len(pattern) >= 6:
                             print('\033[96m' + str(pattern))
-                        return ball_found[0], ball_found[1], new_x, new_y
+                        return ball_found[0], ball_found[1], new_x, new_y, True
                     else:
                         print("nie znalazłem kulki")
 
@@ -170,7 +170,7 @@ def find_pattern(map, Solution_For_Diag):
                         Solution_For_Diag = 1
                         if len(pattern) >= 6:
                             print('\033[96m' + str(pattern))
-                        return ball_found[0], ball_found[1], new_x, new_y
+                        return ball_found[0], ball_found[1], new_x, new_y, True
                     else:
                         print("nie znalazłem kulki")
 
@@ -201,10 +201,10 @@ def find_pattern(map, Solution_For_Diag):
                     ball_found = try_to_move_ball(map, balls_to_consider, new_x, new_y)
                     if ball_found:
                         print("znalazłem kulkę")
-                        # Solution_For_Diag = 0
+                        # Solution_For_Diag = False
                         if len(pattern) >= 6:
                             print('\033[96m' + str(pattern))
-                        return ball_found[0], ball_found[1], new_x, new_y
+                        return ball_found[0], ball_found[1], new_x, new_y, False
                     else:
                         print("nie znalazłem kulki")
 
@@ -243,10 +243,10 @@ def find_pattern(map, Solution_For_Diag):
                     ball_found = try_to_move_ball(map, balls_to_consider, new_x, new_y)
                     if ball_found:
                         print("znalazłem kulkę")
-                        # Solution_For_Diag = 0
+                        # Solution_For_Diag = False
                         if len(pattern) >= 6:
                             print('\033[96m' + str(pattern))
-                        return ball_found[0], ball_found[1], new_x, new_y
+                        return ball_found[0], ball_found[1], new_x, new_y, False
                     else:
                         print("nie znalazłem kulki")
 
@@ -282,10 +282,10 @@ def find_pattern(map, Solution_For_Diag):
                     ball_found = try_to_move_ball(map, balls_to_consider, new_x, new_y)
                     if ball_found:
                         print("znalazłem kulkę")
-                        Solution_For_Diag = 0
+                        Solution_For_Diag = False
                         if len(pattern) >= 6:
                             print('\033[96m' + str(pattern))
-                        return ball_found[0], ball_found[1], new_x, new_y
+                        return ball_found[0], ball_found[1], new_x, new_y, False
                     else:
                         print("nie znalazłem kulki")
 
@@ -324,98 +324,8 @@ def find_pattern(map, Solution_For_Diag):
                         # Solution_For_Diag = Fasle
                         if len(pattern) >= 6:
                             print('\033[96m' + str(pattern))
-                        return ball_found[0], ball_found[1], new_x, new_y
+                        return ball_found[0], ball_found[1], new_x, new_y, False
                     else:
                         print("nie znalazłem kulki")
 
             print("nie znalazłem pattern w -270'")
-
-            # rotate_matrix(rotated_map)
-            #
-            # # JW diag down handling
-            # # trzeba jeszcze raz obr diag down
-            #
-            # print("Teraz diag down': mapa niepowinna rotowana")
-            # print_map(rotated_map)
-            #
-            # diag_down_map = create_diag_down(rotated_map)
-            # diag_down_map_orig_coordinates = create_diag_down_map_orig_coordinates()
-            #
-            # for y, line in enumerate(diag_down_map):
-            #     line_str = listToString(line)
-            #     index = line_str.find(pattern_str)
-            #     if index != -1:
-            #         local_map = [row[:] for row in rotated_map]  # really makes COPY
-            #         add_to_x = pattern_str.find(" ")
-            #         print(index + add_to_x, y, sep=":")
-            #
-            #         mark_diag_down_xes(local_map, changed_pattern, index, y)
-            #
-            #         balls_to_consider = find_not_considered_ball(local_map, color)
-            #
-            #         # JW wsp x and y m
-            #
-            #         new_x = diag_down_map_orig_coordinates[y][index + add_to_x][0]
-            #         new_y = diag_down_map_orig_coordinates[y][index + add_to_x][1]
-            #
-            #         print(diag_down_map_orig_coordinates)
-            #         print(balls_to_consider)
-            #
-            #         # tutaj posortowac balls to consider po signal
-            #         balls_to_consider = add_signal(balls_to_consider, signal_map)
-            #         balls_to_consider = sort_balls_to_consider(balls_to_consider)
-            #
-            #         ball_found = try_to_move_ball(map, balls_to_consider, new_x, new_y)
-            #         if ball_found:
-            #             print("znalazłem kulkę")
-            #             if len(pattern) >= 6:
-            #                 print('\033[96m' + str(pattern))
-            #             return ball_found[0], ball_found[1], new_x, new_y
-            #         else:
-            #             print("nie znalazłem kulki")
-            #
-            # print("nie znalazłem pattern w diag_down")
-            #
-            # # JW diag up handling
-            # # trzeba jeszcze raz obr diag up
-            #
-            # print("Teraz diag up': mapa powinna byc nierotowana ")
-            # print_map(rotated_map)
-            #
-            # diag_up_map = create_diag_up(rotated_map)
-            # diag_up_map_orig_coordinates = create_diag_up_map_orig_coordinates()
-            #
-            # for y, line in enumerate(diag_up_map):
-            #     line_str = listToString(line)
-            #     index = line_str.find(pattern_str)
-            #     if index != -1:
-            #         local_map = [row[:] for row in rotated_map]  # really makes COPY
-            #         add_to_x = pattern_str.find(" ")
-            #         print(index + add_to_x, y, sep=":")
-            #
-            #         mark_diag_up_xes(local_map, changed_pattern, index, y)
-            #
-            #         balls_to_consider = find_not_considered_ball(local_map, color)
-            #
-            #         # JW wsp x and y m
-            #
-            #         new_x = diag_up_map_orig_coordinates[y][index + add_to_x][0]
-            #         new_y = diag_up_map_orig_coordinates[y][index + add_to_x][1]
-            #
-            #         print(diag_up_map_orig_coordinates)
-            #         print(balls_to_consider)
-            #
-            #         # tutaj posortowac balls to consider po signal
-            #         balls_to_consider = add_signal(balls_to_consider, signal_map)
-            #         balls_to_consider = sort_balls_to_consider(balls_to_consider)
-            #
-            #         ball_found = try_to_move_ball(map, balls_to_consider, new_x, new_y)
-            #         if ball_found:
-            #             print("znalazłem kulkę")
-            #             if len(pattern) >= 6:
-            #                 print('\033[96m' + str(pattern))
-            #             return ball_found[0], ball_found[1], new_x, new_y
-            #         else:
-            #             print("nie znalazłem kulki")
-            #
-            # print("nie znalazłem pattern w diag_up")

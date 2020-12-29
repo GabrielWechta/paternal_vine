@@ -52,15 +52,19 @@ def create_the_signal_map(map):
             if map[y][x] == ' ':
                 temporal_field[y + 1][x + 1] = 0
 
-    # set cell in signal table so that the more surrounded ball is - the stronger the signal to move it has
+    # set cell in signal table so that the more surrounded ball is - the stronger is the signal to move it
     for y in range(1, 8):
         for x in range(1, 8):
-            if temporal_field[y][x] != 0:
+            if temporal_field[y][x] >= 0:
                 signal_map[y - 1][x - 1] = temporal_field[y][x + 1] + \
                                            temporal_field[y][x - 1] + \
                                            temporal_field[y - 1][x] + \
                                            temporal_field[y + 1][x]
-
+            # for empty fields we also need to set a signal but it will be negative
+            # else: signal_map[y - 1][x - 1] = -1 * (temporal_field[y][x + 1] + \
+            #                                temporal_field[y][x - 1] + \
+            #                                temporal_field[y - 1][x] + \
+            #                                temporal_field[y + 1][x])
     return signal_map
 
     # ??? set 0 or decrease by 1 if the ball fits the pattern and is part of the 5 ball line ???
