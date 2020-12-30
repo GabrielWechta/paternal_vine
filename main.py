@@ -45,22 +45,22 @@ while True:
 
         if Solution_For_Diag == False:
             if tar_x == 6 or tar_x == 0:
-                if ((tar_y < 6) and local_map[tar_y+1][tar_x] == ' '  and sig[tar_y+1][tar_x] <= -2 ):
+                if ((tar_y < 6) and local_map[tar_y+1][tar_x] == ' '  and sig[tar_y][tar_x] < sig[tar_y+1][tar_x]):
                     print("próba odkorkowania - ruch kulki w górę", str(tar_y), str(tar_x))
                     tar_y = tar_y + 1
                     print("próba odkorkowania - ruch kulki w górę", str(tar_y), str(tar_x))
-                elif ((tar_y > 0) and local_map[tar_y-1][tar_x] == ' '  and sig[tar_y-1][tar_x] <= -2):
+                elif ((tar_y > 0) and local_map[tar_y-1][tar_x] == ' '  and sig[tar_y][tar_x] < sig[tar_y-1][tar_x]):
                     print("próba odkorkowania - ruch kulki w doł", str(tar_y), str(tar_x))
                     tar_y = tar_y - 1
                     print("próba odkorkowania - ruch kulki w doł", str(tar_y), str(tar_x))
 
         # Avoid raw 0 and 6 cork
             elif tar_y == 6 or tar_y == 0:
-                if ((tar_x < 6) and  local_map[tar_y][tar_x+1] == ' '  and sig[tar_y][tar_x+1] <= -2 ):
+                if ((tar_x < 6) and  local_map[tar_y][tar_x+1] == ' '  and sig[tar_y][tar_x] <  sig[tar_y][tar_x+1]):
                     print("próba odkorkowania - ruch kulki w górę", str(tar_y), str(tar_x))
                     tar_x = tar_x + 1
                     print("próba odkorkowania - ruch kulki w górę", str(tar_y), str(tar_x))
-                elif ((tar_x > 0) and local_map[tar_y][tar_x-1] == ' ' and sig[tar_y][tar_x-1] <= -2 ):
+                elif ((tar_x > 0) and local_map[tar_y][tar_x-1] == ' ' and sig[tar_y][tar_x] < sig[tar_y][tar_x-1]):
                     print("próba odkorkowania - ruch kulki w doł", str(tar_y), str(tar_x))
                     tar_x = tar_x - 1
                     print("próba odkorkowania - ruch kulki w doł", str(tar_y), str(tar_x))

@@ -234,6 +234,43 @@ def bfs(mat, src_x: int, src_y: int, dest_x: int, dest_y: int) -> bool:
     return False
 
 
+def calculate_sparsing(mat, x, y):
+    sparsing = 0
+    for i in [-1, 0, 1]:
+        for j in [-1, 0, 1]:
+            if is_valid(x + i, y + j):
+                if mat[y+j][x+i] != " ":
+                    sparsing += 1
+            else:
+                sparsing += 1
+    return sparsing
+
+
+
+def bfs_for_most_sparse_place(mat, src_x: int, src_y: int):
+    src = queueNode(src_x, src_y)
+    rowNum = [-1, 0, 0, 1]
+    colNum = [0, -1, 1, 0]
+
+    sparse_places = []
+
+    visited = [[False for _ in range(7)] for _ in range(7)]
+    visited[src.y][src.x] = True
+    q = deque()
+    q.append(src)
+    while q:
+        curr = q.popleft()
+        sparse_places.append([calculate_sparsing(mat, curr.x, curr.y), curr.x, curr.y])
+        for i in range(4):
+            row = curr.y + rowNum[i]
+            col = curr.x + colNum[i]
+            if is_valid(row, col) and mat[row][col] == " " and not visited[row][col]:
+                visited[row][col] = True
+                adjacent_cell = queueNode(col, row)
+                q.append(adjacent_cell)
+    return sparse_places[1:]
+
+
 def try_to_move_ball(maze, balls_to_consider, x_target, y_target):
     for ball in balls_to_consider:
         if bfs(maze, ball[0], ball[1], x_target, y_target):
